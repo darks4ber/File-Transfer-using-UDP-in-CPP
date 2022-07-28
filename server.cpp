@@ -8,7 +8,6 @@
 #include<string.h>
 #include<stdlib.h>
 #include<fstream>
-using namespace std;
 #define maxlen 70000
 #define mlen 100000
 
@@ -31,11 +30,11 @@ int main()
 
     if(sd==-1)
     {
-        cout<<"Socket not created in server"<<endl;
+        std::cout<<"Socket not created in server"<<std::endl;
         exit(0);
     }
     else
-    	cout<<"Socket created in server"<<endl;
+    	std::cout<<"Socket created in server"<<std::endl;
 
 
 bzero(&servaddr,sizeof(servaddr));
@@ -53,9 +52,9 @@ memset(&(servaddr.sin_zero),'\0',8);     //setting the sin_zero parameter as nul
 
 
 if( bind(sd,(struct sockaddr *)&servaddr,sizeof(servaddr))!=0)
-    cout<<"Not binded"<<endl;
+    std::cout<<"Not binded"<<std::endl;
     else
-    cout<<"Binded"<<endl;
+    std::cout<<"Binded"<<std::endl;
 
     len=sizeof(cliaddr);
     int choice=1;
@@ -73,11 +72,11 @@ if( bind(sd,(struct sockaddr *)&servaddr,sizeof(servaddr))!=0)
 			//Case for Text files
 			
 				recvfrom(sd,fileName,1024,0,(struct sockaddr *)&cliaddr,&len);
-				cout<<"NAME OF THE TEXT FILE RECEIVED: " <<endl<<fileName;
+				std::cout<<"NAME OF THE TEXT FILE RECEIVED: " <<std::endl<<fileName;
         		FILE *fp;
-        		cout<<"Contents in the received text file: "<<endl;
+        		std::cout<<"\nContents in the received text file: "<<std::endl;
         		recvfrom(sd,fileBuffer,1024,0,(struct sockaddr *)&cliaddr,&len);  //recvfunction is a function used for UDP transfer 1024 is memory of flag 0 and it's length
-        		cout<<endl<<fileBuffer;
+        		std::cout<<std::endl<<fileBuffer;
 
         		int fsize =strlen(fileBuffer);  //fsize is used to save the memory of filebuffer 
 				
@@ -85,10 +84,10 @@ if( bind(sd,(struct sockaddr *)&servaddr,sizeof(servaddr))!=0)
 				if(fp)
 				{
 					fwrite(fileBuffer,fsize,1,fp);
-					cout<<"File received successfully"<<endl;	
+					std::cout<<"\n\nFile received successfully"<<std::endl;	
 				}
 				else
-					cout<<"Can't create to output file";
+					std::cout<<"Can't create to output file";
 		
 				memset(fileName,'\0',sizeof(fileName));
 				fclose(fp);
@@ -98,7 +97,7 @@ if( bind(sd,(struct sockaddr *)&servaddr,sizeof(servaddr))!=0)
 		{
 
 				recvfrom(sd,fileName,1024,0,(struct sockaddr *)&cliaddr,&len);	//to recieve filename
-				cout<<"Name of audio file received"<<endl<<fileName;
+				std::cout<<"Name of audio file received"<<std::endl<<fileName;
 				FILE *afp;		//afp is pointer varible
 				int numbytes;
 				afp=fopen(fileName,"w");	//Opening audio file in write format
@@ -107,10 +106,10 @@ if( bind(sd,(struct sockaddr *)&servaddr,sizeof(servaddr))!=0)
 				if(afp)
 				{
 					fwrite(aufile,afsize,1,afp); //running fwrite to save the file(aufile) onto the server side and If it's non zero,then the operation was successfull
-					cout<<"File received successfully"<<endl;
+					std::cout<<"File received successfully"<<std::endl;
 				}
 				else
-					cout<<"Can't open output file";
+					std::cout<<"Can't open output file";
 				memset(fileName,'\0',sizeof(fileName));	//memset, fileName contents are set to null so that we can use it again
 				fclose(afp);
 				
@@ -119,7 +118,7 @@ if( bind(sd,(struct sockaddr *)&servaddr,sizeof(servaddr))!=0)
 		else if(choice==3)
 		{
 				recvfrom(sd,fileName,1024,0,(struct sockaddr *)&cliaddr,&len);
-				cout<<"Video file name received : "<<endl<<fileName;
+				std::cout<<"Video file name received : "<<std::endl<<fileName;
 				FILE *vfp;
 				vfp=fopen(fileName,"w");
 				size_t vfsize;
@@ -128,10 +127,10 @@ if( bind(sd,(struct sockaddr *)&servaddr,sizeof(servaddr))!=0)
 				if(vfp)
 				{
 					fwrite(vfile,vfsize,1,vfp);
-					cout<<"File received successfully"<<endl;
+					std::cout<<"File received successfully"<<std::endl;
 				}
 				else
-					cout<<"Can't open output file"<<endl;
+					std::cout<<"Can't open output file"<<std::endl;
 				fclose(vfp);
 				
 		}	
