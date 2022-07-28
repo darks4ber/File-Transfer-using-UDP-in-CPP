@@ -7,7 +7,6 @@
 #include<sys/socket.h>
 #include<arpa/inet.h>
 #include<netinet/in.h>
-using namespace std;
 
 int main()
 {
@@ -31,14 +30,15 @@ bzero(&servaddr,sizeof(servaddr));
 //-------------------------------Filling Server Information---------------------------------------
 servaddr.sin_family=AF_INET;
 servaddr.sin_port=htons(6666);
-servaddr.sin_addr.s_addr=INADDR_ANY;    //This is for local host machine(single machine)
+servaddr.sin_addr.s_addr=INADDR_ANY;    //This is for local host machine(single mastd::cine)
+//servaddr.sin_addr.s_addr=inet_addr("192.168.99.214");
 
 int choice=1;
 
 // while(choice=!4)
 // {
-    cout<<"Enter \n 1.TEXT \n 2.AUDIO \n 3.VIDEO \n4.EXIT";
-    cin>>choice;   
+    std::cout<<"Enter \n 1.TEXT \n 2.AUDIO \n 3.VIDEO \n 4.EXIT\n:";
+    std::cin>>choice;   
     char num=choice;
     //Input the choice from the user, note the variable is char as we can only send char type in communication(as sendto and recvfrom only receives char type)
 
@@ -49,8 +49,8 @@ int choice=1;
     {
     //In this code we'll use sendto() function rather than recvfrom() bcoz we need to send the files
      //for text file
-            cout<<"Enter text file name to send: "<<endl;
-            cin>>fileName;
+            std::cout<<"Enter text file name to send: "<<std::endl;
+            std::cin>>fileName;
             sendto(fd,fileName,strlen(fileName),0,(struct sockaddr *)&servaddr,sizeof(struct sockaddr));        //Sending filename to server side
             
             FILE *fp;
@@ -59,29 +59,29 @@ int choice=1;
             if(fp)
             {
                 //After opening it we're copying the file contents in the fileBuffer
-                cout<<"Reading file contents: "<<endl;
+                std::cout<<"Reading file contents: "<<std::endl;
                 fseek(fp,0,SEEK_END);
                 size_t file_size=ftell(fp); 
                 fseek(fp,0,SEEK_SET);
                 if(fread(file_Buffer,file_size,1,fp)<=0)    //copied into the file_Buffer using fread()
                 {
-                    cout<<"Unable to copy file into buffer or empty file";
+                    std::cout<<"Unable to copy file into buffer or empty file";
                     exit(1);
                 }
             }    
             else
             {
-                cout<<"Can't open file "<<endl;
+                std::cout<<"Can't open file "<<std::endl;
                 exit(0);
             }
-            cout<<"File contents to send "<<file_Buffer<<endl; 
+            std::cout<<"File contents to send "<<file_Buffer<<std::endl; 
             if(sendto(fd,file_Buffer,strlen(file_Buffer),0,(struct sockaddr *)&servaddr, sizeof(struct sockaddr))<0)   //sending the fileBuffer i.e. content of the file
             {
-                cout<<"File was not sent"<<endl;
+                std::cout<<"File was not sent"<<std::endl;
             }
             else
             {
-                cout<<"File Sent"<<endl;
+                std::cout<<"File Sent"<<std::endl;
             }
                 fclose(fp);
     }
@@ -90,8 +90,8 @@ int choice=1;
 
     
         //For Audio File
-        cout<<"Enter audio file name to send: "<<endl;
-        cin>>afileName;
+        std::cout<<"Enter audio file name to send: "<<std::endl;
+        std::cin>>afileName;
         sendto(fd,afileName,strlen(afileName),0,(struct sockaddr *)&servaddr,sizeof(struct sockaddr));  //sending the name of the file
         FILE *afp;
         afp=fopen(afileName,"r");
@@ -101,25 +101,25 @@ int choice=1;
 
         if(afp)
         {
-            cout<<"Reading file contents"<<endl;
+            std::cout<<"Reading file contents"<<std::endl;
             if(fread(aufile,afsize,1,afp)<=0)
             {
-                cout<<"Unable to copy file into buffer or empty file"<<endl;
+                std::cout<<"Unable to copy file into buffer or empty file"<<std::endl;
                 exit(1);
             }
         }
         else
         {
-            cout<<"Could not read audio file";
+            std::cout<<"Could not read audio file";
             exit(0);
         }
         if(sendto(fd,aufile,afsize,0,(struct sockaddr *)&servaddr,sizeof(struct sockaddr))<0)    //Sending the contents of the file
         {
-            cout<<"File was not sent "<<endl;
+            std::cout<<"File was not sent "<<std::endl;
         }
         else
         {
-            cout<<"File Sent";
+            std::cout<<"File Sent";
         }
         fclose(afp);
         
@@ -129,8 +129,8 @@ int choice=1;
     else if(choice==3)
     {
 
-        cout<<"Enter the video file name to send "<<endl;
-        cin>>vfileName;
+        std::cout<<"Enter the video file name to send "<<std::endl;
+        std::cin>>vfileName;
         sendto(fd,vfileName,strlen(vfileName),0,(struct sockaddr *)&servaddr,sizeof(struct sockaddr)); //Sendint the name of video file
         FILE *vfp;
         vfp=fopen(vfileName,"r");
@@ -140,25 +140,25 @@ int choice=1;
 
         if(vfp)
         {
-           // cout<<"Reading file contents"<<endl;
+           // std::cout<<"Reading file contents"<<std::endl;
             if(fread(vfile,1,vfsize,vfp)<=0)
             {
-                cout<<"Unable to copy video file into buffer or empty file"<<endl;
+                std::cout<<"Unable to copy video file into buffer or empty file"<<std::endl;
                // exit(1);
             }
         }
         else
         {
-            cout<<"Could not read video file: "<<endl;
+            std::cout<<"Could not read video file: "<<std::endl;
             exit(0);
         }
         if(sendto(fd,vfile,vfsize,0,(struct sockaddr *)&servaddr,sizeof(struct sockaddr ))<0)
         {
-            cout<<"File was not sent"<<endl;
+            std::cout<<"File was not sent"<<std::endl;
         }
         else
         {
-            cout<<"File Sent"<<endl;
+            std::cout<<"File Sent"<<std::endl;
         }
         fclose(vfp);
         
