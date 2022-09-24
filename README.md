@@ -10,4 +10,3 @@
 
 #### ScreenShot
 
-[](https://raw.githubusercontent.com/darks4ber/File-Transfer-using-UDP-in-CPP/main/FEATURES/screenshots/cpp.png)
